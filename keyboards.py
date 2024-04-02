@@ -10,5 +10,6 @@ main_kb = ReplyKeyboardMarkup(
             KeyboardButton(text='Самый длинный текст'),
             KeyboardButton(text='Самый длинный заголовок')
         ]
-    ]
+    ],
+    resize_keyboard=True
 )

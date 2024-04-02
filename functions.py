@@ -1,5 +1,4 @@
 import aiohttp
-import asyncio
 import pandas as pd
 from aiohttp import ContentTypeError
 

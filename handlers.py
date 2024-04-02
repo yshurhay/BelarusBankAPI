@@ -7,10 +7,10 @@ from aiogram.fsm.context import FSMContext
 from functions import get_info, to_excel
 
 import keyboards as kb
-import info
 
 
 router = Router()
+all_news = []
 
 
 class News(StatesGroup):
@@ -23,14 +23,14 @@ class Count(StatesGroup):
 
 @router.message(F.text.lower() == 'самый длинный текст')
 async def text(message: Message):
-    longest_text = max(info.all_news, key=lambda x: len(x['text']))
+    longest_text = max(all_news, key=lambda x: len(x['text']))
     to_excel({'text_max_length': longest_text}, 'longest_text')
     await message.answer_document(FSInputFile('longest_text.xlsx', filename='longest_text.xlsx'), reply_markup=kb.main_kb)
 
 
 @router.message(F.text.lower() == 'самый длинный заголовок')
 async def text(message: Message):
-    longest_title = max(info.all_news, key=lambda x: len(x['title'].split()))
+    longest_title = max(all_news, key=lambda x: len(x['title'].split()))
     to_excel({'title_max_length': longest_title}, 'longest_title')
     await message.answer_document(FSInputFile('longest_title.xlsx', filename='longest_title.xlsx'), reply_markup=kb.main_kb)
 
@@ -45,7 +45,7 @@ async def text(message: Message, state: FSMContext):
 async def symbol(message: Message, state: FSMContext):
     await state.update_data(symbol=message.text)
     data = await state.get_data()
-    all_text = ' '.join(news['text'] for news in info.all_news)
+    all_text = ' '.join(news['text'] for news in all_news)
     await message.answer(f'Количество "{data['symbol']}" в тексте: {all_text.count(data['symbol'])}')
 
 
@@ -64,7 +64,7 @@ async def count(message: Message, state: FSMContext):
         else:
             await state.update_data(count=int(message.text))
             to_excel(result, 'news')
-            info.all_news = result
+            all_news = result
             await message.answer_document(FSInputFile('news.xlsx', filename='news.xlsx'), reply_markup=kb.main_kb)
     except ValueError:
         await message.answer('Введите число')
