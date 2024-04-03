@@ -39,6 +39,26 @@ async def text(message: Message):
     await message.answer_document(FSInputFile('longest_title.xlsx', filename='longest_title.xlsx'), reply_markup=kb.main_kb)
 
 
+@router.message(F.text.lower() == 'новости в чётные дни')
+async def get_news(message: Message):
+    """Find news in even days and send excel file"""
+
+    even_days = list(filter(lambda x: int(x['date'][8:]) % 2 == 0, all_news))
+    to_excel(even_days, 'even_days')
+    await message.answer_document(FSInputFile('even_days.xlsx', filename='even_days.xlsx'),
+                                  reply_markup=kb.main_kb)
+
+
+@router.message(F.text.lower() == 'новости в нечётные дни')
+async def get_news(message: Message):
+    """Find news in odd days and send excel file"""
+
+    odd_days = list(filter(lambda x: int(x['date'][8:]) % 2, all_news))
+    to_excel(odd_days, 'odd_days')
+    await message.answer_document(FSInputFile('odd_days.xlsx', filename='odd_days.xlsx'),
+                                  reply_markup=kb.main_kb)
+
+
 @router.message(F.text.lower() == 'количество символов')
 async def text(message: Message, state: FSMContext):
     """Set state with any symbol"""
