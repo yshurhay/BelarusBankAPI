@@ -4,6 +4,8 @@ from aiohttp import ContentTypeError
 
 
 async def get_info(count):
+    """Get API and convert to list[dict]"""
+
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get('https://belarusbank.by/api/news_info?lang=ru') as response:
@@ -23,6 +25,8 @@ async def get_info(count):
 
 
 def to_excel(item, name):
+    """Write dict to excel"""
+
     try:
         item_db = pd.DataFrame(item)
         item_db.to_excel(f'{name}.xlsx')

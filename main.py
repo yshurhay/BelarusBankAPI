@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher
 from handlers import router
 
 
-bot = Bot(TOKEN)
+bot = Bot('6941678011:AAFHog6xvh4YN1BV7p3vli3hhHKRoU_E0kw')
 dp = Dispatcher()
 dp.include_router(router)
 
